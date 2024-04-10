@@ -13,6 +13,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  ExpenseCategory _selectedCategory = ExpenseCategory.leisure;
 
   void _presentDatePicker() async{
     // 範圍一年前至今
@@ -77,8 +78,27 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
               )
             ],
           ),
+          const SizedBox(height: 16),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: ExpenseCategory.values.map(
+                  (category) => DropdownMenuItem(
+                    value: category,           // 不會顯示在前端
+                    child: Text(category.name.toUpperCase()) // 顯示在前端
+                  )
+                ).toList(), 
+                onChanged: (value){
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                }
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: (){
                   // 關閉BottomSheet
