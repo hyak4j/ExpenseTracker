@@ -30,7 +30,14 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       context: context, 
-      builder: (ctx) => const NewExpenseScreen());
+      builder: (ctx) => NewExpenseScreen(onAddExpense: _addExpense,));
+  }
+
+  // 新增記帳資料
+  void _addExpense(ExpenseModel expenseModel) {
+    setState(() {
+      _registeredExpenses.add(expenseModel);
+    });
   }
 
   @override

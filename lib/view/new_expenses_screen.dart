@@ -3,7 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:expense_tracker/model/expense_model.dart';
 
 class NewExpenseScreen extends StatefulWidget {
-  const NewExpenseScreen({super.key});
+  const NewExpenseScreen({super.key, required this.onAddExpense});
+
+  final void Function(ExpenseModel expenseModel) onAddExpense;
 
   @override
   State<NewExpenseScreen> createState() => _NewExpenseScreenState();
@@ -52,6 +54,15 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
       );
       return;
     }
+    // 回寫填寫內容
+    widget.onAddExpense(
+      ExpenseModel(
+        title: _titleController.text, 
+        amount: enteredAmount, 
+        date: _selectedDate!, 
+        category: _selectedCategory
+      ),
+    );
   }
 
   @override
