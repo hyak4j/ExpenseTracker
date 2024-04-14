@@ -43,13 +43,39 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   // 刪除記帳資料
   void _removeExpense(ExpenseModel expenseModel) {
+    final expenseIndex = _registeredExpenses.indexOf(expenseModel);
     setState(() {
       _registeredExpenses.remove(expenseModel);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('此筆記錄已被刪除'),
+        action: SnackBarAction(
+          label: '取消刪除', 
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expenseModel);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(
+      child: Text('無任何記帳資料，開始你的記錄吧!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+              expenses: _registeredExpenses,
+              onRemoveExpense: _removeExpense,
+              );
+    }   
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Tracker'),
@@ -64,10 +90,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         children: [
           const Text('The Chart'),
           Expanded(
-            child: ExpensesList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-              )
+            child: mainContent
           ),
         ],
       ),
