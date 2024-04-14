@@ -29,6 +29,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true, // 占滿螢幕
       context: context, 
       builder: (ctx) => NewExpenseScreen(onAddExpense: _addExpense,));
   }
@@ -37,6 +38,13 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   void _addExpense(ExpenseModel expenseModel) {
     setState(() {
       _registeredExpenses.add(expenseModel);
+    });
+  }
+
+  // 刪除記帳資料
+  void _removeExpense(ExpenseModel expenseModel) {
+    setState(() {
+      _registeredExpenses.remove(expenseModel);
     });
   }
 
@@ -56,7 +64,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         children: [
           const Text('The Chart'),
           Expanded(
-            child: ExpensesList(expenses: _registeredExpenses)
+            child: ExpensesList(
+              expenses: _registeredExpenses,
+              onRemoveExpense: _removeExpense,
+              )
           ),
         ],
       ),
