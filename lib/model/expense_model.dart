@@ -33,3 +33,28 @@ class ExpenseModel {
     return formatter.format(date);
   }
 }
+
+class ExpenseBucket {
+  const ExpenseBucket({
+    required this.expenseCategory,
+    required this.expenses
+  });
+
+  // 過濾資料
+  ExpenseBucket.forCategory(List<ExpenseModel> allExpenses, this.expenseCategory) 
+  : expenses = allExpenses
+              .where((expense) => expense.category == expenseCategory)
+              .toList();
+
+  final ExpenseCategory expenseCategory;
+  final List<ExpenseModel> expenses;
+
+  double get totalExpenses {
+    // 計算總額
+    double sum = 0;
+    for(final expense in expenses) {
+      sum += expense.amount;
+    }
+    return sum;
+  }
+}
